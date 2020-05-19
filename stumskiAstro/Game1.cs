@@ -1,15 +1,19 @@
 ﻿using Microsoft.Xna.Framework;
 using Microsoft.Xna.Framework.Graphics;
+using Microsoft.Xna.Framework.Input;
+using Microsoft.Xna.Framework.Input.Touch;
+using Windows.ApplicationModel.Core;
 
 namespace stumskiAstro
 {
-    /// <summary>
-    /// This is the main type for your game.
-    /// </summary>
     public class Game1 : Game
     {
         GraphicsDeviceManager graphics;
         SpriteBatch spriteBatch;
+        private Rakieta gracz;
+        private Texture2D rakieta;
+        private Texture2D control;
+        private Texture2D niebo;
 
         public Game1()
         {
@@ -17,62 +21,104 @@ namespace stumskiAstro
             Content.RootDirectory = "Content";
         }
 
-        /// <summary>
-        /// Allows the game to perform any initialization it needs to before starting to run.
-        /// This is where it can query for any required services and load any non-graphic
-        /// related content.  Calling base.Initialize will enumerate through any components
-        /// and initialize them as well.
-        /// </summary>
         protected override void Initialize()
         {
-            // TODO: Add your initialization logic here
-
+            graphics.IsFullScreen = false;
+            graphics.PreferredBackBufferWidth = 480;
+            graphics.PreferredBackBufferHeight = 800;
+            graphics.ApplyChanges();
             base.Initialize();
         }
 
-        /// <summary>
-        /// LoadContent will be called once per game and is the place to load
-        /// all of your content.
-        /// </summary>
         protected override void LoadContent()
         {
-            // Create a new SpriteBatch, which can be used to draw textures.
             spriteBatch = new SpriteBatch(GraphicsDevice);
-
-            // TODO: use this.Content to load your game content here
+            niebo = Content.Load<Texture2D>("niebo");
+            rakieta = Content.Load<Texture2D>("AnimRakiety");
+            control = Content.Load<Texture2D>("control");
+            
+            gracz = new Rakieta(rakieta);
         }
-
-        /// <summary>
-        /// UnloadContent will be called once per game and is the place to unload
-        /// game-specific content.
-        /// </summary>
         protected override void UnloadContent()
         {
             // TODO: Unload any non ContentManager content here
         }
 
-        /// <summary>
-        /// Allows the game to run logic such as updating the world,
-        /// checking for collisions, gathering input, and playing audio.
-        /// </summary>
-        /// <param name="gameTime">Provides a snapshot of timing values.</param>
         protected override void Update(GameTime gameTime)
         {
-            // TODO: Add your update logic here
+            //obsługa klawiaturą
+            if (Keyboard.GetState().IsKeyDown(Keys.X))
+            {
+                CoreApplication.Exit();
+            }
+            else if (Keyboard.GetState().IsKeyDown(Keys.W))
+            {
+                gracz.MoveU();
+            }
+            else if (Keyboard.GetState().IsKeyDown(Keys.S))
+            {
+                gracz.MoveD();
+            }
+            else if (Keyboard.GetState().IsKeyDown(Keys.A))
+            {
+                gracz.MoveL();
+            }
+            else if (Keyboard.GetState().IsKeyDown(Keys.D))
+            {
+                gracz.MoveR();
+            }
+            else if (Keyboard.GetState().IsKeyDown(Keys.Space))
+            {
+                //TODO: strzelanie
+            }
 
+            //obsługa dotykiem
+            TouchCollection mscaDotknięte = TouchPanel.GetState();
+            foreach (TouchLocation dotyk in mscaDotknięte)
+            {
+                Vector2 pozDotyku = dotyk.Position; //równanie okręgu dla kliknięcie też?
+                if(dotyk.State == TouchLocationState.Moved)
+                {
+                    //jeśli pozDotyku spełnia któreś z równać okręgu to dana akcja, punkt S=(a,b)
+                    Vector2 upButton = new Vector2(110, 645); //r=40
+                    Vector2 downButton = new Vector2(110, 740); //r=40
+                    Vector2 leftButton = new Vector2(60, 690); //r=40
+                    Vector2 rightButton = new Vector2(160, 690); //r=40
+                   
+                    //dotyk musiałby mieć promień mniejszy niż przycisk?
+                    if (pozDotyku == upButton)
+                    {
+                        gracz.MoveU();
+                    }
+                    if (pozDotyku == downButton)
+                    {
+                        gracz.MoveD();
+                    }
+                    if (pozDotyku == leftButton)
+                    {
+                        gracz.MoveL();
+                    }
+                    if (pozDotyku == rightButton)
+                    {
+                        gracz.MoveR();
+                    }
+                }
+                if(dotyk.State == TouchLocationState.Pressed)
+                {
+                    //TODO: strzelanie
+                }
+            }
             base.Update(gameTime);
         }
 
-        /// <summary>
-        /// This is called when the game should draw itself.
-        /// </summary>
-        /// <param name="gameTime">Provides a snapshot of timing values.</param>
         protected override void Draw(GameTime gameTime)
         {
             GraphicsDevice.Clear(Color.CornflowerBlue);
-
-            // TODO: Add your drawing code here
-
+            spriteBatch.Begin();
+            spriteBatch.Draw(niebo, new Vector2(0, 0), Color.White);
+            gracz.Draw(rakieta, spriteBatch); //tylko fragment z rectangle zgodnie z instrukcją
+            spriteBatch.Draw(control, new Vector2(0, 583), Color.White);
+            spriteBatch.End();
             base.Draw(gameTime);
         }
     }
