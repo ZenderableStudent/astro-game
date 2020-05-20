@@ -28,12 +28,14 @@ namespace stumskiAstro
             graphics.PreferredBackBufferWidth = 480;
             graphics.PreferredBackBufferHeight = 800;
             graphics.ApplyChanges();
+
             base.Initialize();
         }
 
         protected override void LoadContent()
         {
             spriteBatch = new SpriteBatch(GraphicsDevice);
+
             niebo = Content.Load<Texture2D>("niebo");
             rakieta = Content.Load<Texture2D>("AnimRakiety");
             control = Content.Load<Texture2D>("control");
@@ -109,9 +111,11 @@ namespace stumskiAstro
         {
             GraphicsDevice.Clear(Color.CornflowerBlue);
             spriteBatch.Begin();
+
             spriteBatch.Draw(niebo, new Vector2(0, 0), Color.White); //niebo
             gracz.Draw(rakieta, spriteBatch); //tylko fragment z rectangle zgodnie z instrukcją
             spriteBatch.Draw(control, new Vector2(0, 583), Color.White); //przyciski
+
             spriteBatch.End();
             base.Draw(gameTime);
         }

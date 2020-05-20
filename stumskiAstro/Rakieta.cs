@@ -1,10 +1,6 @@
 ﻿using Microsoft.Xna.Framework;
 using Microsoft.Xna.Framework.Graphics;
-using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
+using System.Threading;
 
 namespace stumskiAstro
 {
@@ -12,10 +8,12 @@ namespace stumskiAstro
     {
         private Texture2D texture;
         private Vector2 position;
+        private int nrKlatki;
         public Rakieta(Texture2D texture) //musi być public, by działało w klasie Game1
         {
             this.texture = texture;
             position = new Vector2(210, 480);
+            nrKlatki = 0;
         }
         Vector2 GetPosition()
         {
@@ -59,8 +57,16 @@ namespace stumskiAstro
         }
         public void Draw(Texture2D rakieta, SpriteBatch spriteBatch) //tylko ten fragment kodu w metodzie zgodnie z instrukcją
         {
-            Rectangle rectGracza = new Rectangle((int)GetPosition().X,(int)GetPosition().Y, rakieta.Width, rakieta.Height);
-            spriteBatch.Draw(rakieta, rectGracza, Color.White);
+            int szerokośćKlatki = texture.Width / 6;
+
+            Rectangle rectGracza = new Rectangle((int)GetPosition().X,(int)GetPosition().Y, rakieta.Width, rakieta.Height); //zostawione w celu pokazania, że było robione zgodnie z instrukcją
+            Rectangle klatka = new Rectangle(nrKlatki * szerokośćKlatki, 0, szerokośćKlatki, texture.Height);
+            rectGracza = new Rectangle((int)position.X, (int)position.Y, klatka.Width, klatka.Height);
+            spriteBatch.Draw(texture, rectGracza, klatka, Color.White);
+            nrKlatki++;
+            if (nrKlatki == 6)
+                nrKlatki = 0;
+            //spriteBatch.Draw(rakieta, rectGracza, Color.White); //poprzednie punkty w instrukcji 
         }
     }
 }
