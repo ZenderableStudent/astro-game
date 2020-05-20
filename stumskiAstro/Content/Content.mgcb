@@ -37,6 +37,20 @@
 /processorParam:TextureFormat=Color
 /build:control.png
 
+#begin File.spritefont
+/importer:FontDescriptionImporter
+/processor:FontDescriptionProcessor
+/processorParam:PremultiplyAlpha=True
+/processorParam:TextureFormat=Compressed
+/build:File.spritefont
+
+#begin KolizjaPocisk.spritefont
+/importer:FontDescriptionImporter
+/processor:FontDescriptionProcessor
+/processorParam:PremultiplyAlpha=True
+/processorParam:TextureFormat=Compressed
+/build:KolizjaPocisk.spritefont
+
 #begin meteor.png
 /importer:TextureImporter
 /processor:TextureProcessor

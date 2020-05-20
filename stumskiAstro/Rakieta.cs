@@ -8,16 +8,55 @@ namespace stumskiAstro
     {
         private Texture2D texture;
         private Vector2 position;
+        private Texture2D pocisk2D;
         private int nrKlatki;
-        public Rakieta(Texture2D texture) //musi być public, by działało w klasie Game1
+        private int szerokośćKlatki;
+        private Pocisk strzał;
+        public Rakieta(Texture2D texture, Texture2D pocisk2D) //musi być public, by działało w klasie Game1
         {
             this.texture = texture;
+            this.pocisk2D = pocisk2D;
             position = new Vector2(210, 480);
             nrKlatki = 0;
+            strzał.wystrzelony = false;
         }
-        Vector2 GetPosition() //zostawione bo wcześniej używane w instrukcji
+        public Vector2 GetPocisk()
+        {
+            return strzał.position;
+        }
+        public void Wystrzel()
+        {
+            strzał.wystrzelony = true;
+            strzał.position = position;
+        }
+        public void deletePocisk()
+        {
+            strzał.wystrzelony = false;
+            strzał.position = new Vector2(1000, 1000); //ustawia pozycje pocisku poza mapa, bez tego dalej wykrywalo kolizje
+        }
+        private struct Pocisk
+        {
+            public Vector2 position;
+            public bool wystrzelony;
+
+        }
+        public void LotPocisku()
+        {
+            if (strzał.wystrzelony)
+            {
+                strzał.position.Y -= 10;
+                if (strzał.position.Y < 0)
+                    strzał.wystrzelony = false;
+
+            }
+        }
+        public Vector2 GetPosition()
         {
             return position;
+        }
+        public Vector2 GetSize()
+        {
+            return new Vector2(texture.Width / 6, texture.Height);
         }
         public void MoveL() //musi być public, by działało w klasie Game1
         {
@@ -57,16 +96,21 @@ namespace stumskiAstro
         }
         public void Draw(Texture2D rakieta, SpriteBatch spriteBatch) //tylko ten fragment kodu w metodzie zgodnie z instrukcją
         {
-            int szerokośćKlatki = texture.Width / 6;
+            szerokośćKlatki = texture.Width / 6;
 
-            Rectangle rectGracza = new Rectangle((int)GetPosition().X,(int)GetPosition().Y, rakieta.Width, rakieta.Height); //zostawione w celu pokazania, że było robione zgodnie z instrukcją
+            //Rectangle rectGracza = new Rectangle((int)GetPosition().X,(int)GetPosition().Y, rakieta.Width, rakieta.Height); //zostawione w celu pokazania, że było robione zgodnie z instrukcją
             Rectangle klatka = new Rectangle(nrKlatki * szerokośćKlatki, 0, szerokośćKlatki, texture.Height);
-            rectGracza = new Rectangle((int)position.X, (int)position.Y, klatka.Width, klatka.Height);
+            Rectangle rectGracza = new Rectangle((int)position.X, (int)position.Y, klatka.Width, klatka.Height);
             spriteBatch.Draw(texture, rectGracza, klatka, Color.White);
+            if (strzał.wystrzelony)
+            {
+                spriteBatch.Draw(pocisk2D, strzał.position, Color.White);
+            }
             nrKlatki++;
             if (nrKlatki == 6)
                 nrKlatki = 0;
             //spriteBatch.Draw(rakieta, rectGracza, Color.White); //poprzednie punkty w instrukcji 
+            
         }
     }
 }
