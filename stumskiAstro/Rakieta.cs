@@ -15,7 +15,7 @@ namespace stumskiAstro
             position = new Vector2(210, 480);
             nrKlatki = 0;
         }
-        Vector2 GetPosition()
+        Vector2 GetPosition() //zostawione bo wcześniej używane w instrukcji
         {
             return position;
         }

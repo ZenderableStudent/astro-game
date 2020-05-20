@@ -12,7 +12,9 @@ namespace stumskiAstro
         GraphicsDeviceManager graphics;
         SpriteBatch spriteBatch;
         private Rakieta gracz;
+        private Meteor wróg;
         private Texture2D rakieta;
+        private Texture2D meteor;
         private Texture2D control;
         private Texture2D niebo;
 
@@ -38,8 +40,10 @@ namespace stumskiAstro
 
             niebo = Content.Load<Texture2D>("niebo");
             rakieta = Content.Load<Texture2D>("AnimRakiety");
+            meteor = Content.Load<Texture2D>("meteor");
             control = Content.Load<Texture2D>("control");
-            
+
+            wróg = new Meteor(meteor);
             gracz = new Rakieta(rakieta);
         }
         protected override void UnloadContent()
@@ -114,6 +118,7 @@ namespace stumskiAstro
 
             spriteBatch.Draw(niebo, new Vector2(0, 0), Color.White); //niebo
             gracz.Draw(rakieta, spriteBatch); //tylko fragment z rectangle zgodnie z instrukcją
+            wróg.Draw(spriteBatch);
             spriteBatch.Draw(control, new Vector2(0, 583), Color.White); //przyciski
 
             spriteBatch.End();
