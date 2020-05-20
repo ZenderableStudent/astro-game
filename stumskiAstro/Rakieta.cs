@@ -23,45 +23,37 @@ namespace stumskiAstro
         }
         public void MoveL() //musi być public, by działało w klasie Game1
         {
-            if(position.X >= 0 && position.X <= 400)
+            if(position.X <= 400)
             {
                 position.X -= 5;
-                if (position.X < 0) //bo position.X może być -5 lub 405
+                if (position.X < 0) //bo position.X może być -5 i wypada poza mapę w moim przypadku
                     position.X = 0;
-                if (position.X > 400)
-                    position.X = 400;
             }
         }
         public void MoveR() //musi być public, by działało w klasie Game1
         {
-            if (position.X >= 0 && position.X <= 400)
+            if (position.X >= 0)
             {
                 position.X += 5;
-                if (position.X < 0) //bo position.X może być -5 lub 405
-                    position.X = 0;
-                if (position.X > 400)
+                if (position.X > 400) //bo position.X może być 405 i wypada poza mapę
                     position.X = 400;
             }    
         }
         public void MoveU() //musi być public, by działało w klasie Game1
         {
-            if (position.Y >= 0 && position.Y <= 477)
+            if (position.Y >= 0)
             {
                 position.Y -= 5;
-                if (position.Y < 0) //bo position.Y może być -5 lub 482
+                if (position.Y < 0) //bo position.Y może być -5 i wypada poza mapę
                     position.Y = 0;
-                if (position.Y > 477)
-                    position.Y = 477;
             }
         }
         public void MoveD() //musi być public, by działało w klasie Game1
         {
-            if (position.Y >= 0 && position.Y <= 477)
+            if (position.Y <= 477)
             {
                 position.Y += 5;
-                if (position.Y < 0) //bo position.Y może być -5 lub 482
-                    position.Y = 0;
-                if (position.Y > 477)
+                if (position.Y > 477) //bo position.Y może być 482 i wypada poza mapę
                     position.Y = 477;
             }
         }

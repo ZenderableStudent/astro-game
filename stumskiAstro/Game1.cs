@@ -2,6 +2,7 @@
 using Microsoft.Xna.Framework.Graphics;
 using Microsoft.Xna.Framework.Input;
 using Microsoft.Xna.Framework.Input.Touch;
+using System;
 using Windows.ApplicationModel.Core;
 
 namespace stumskiAstro
@@ -76,29 +77,23 @@ namespace stumskiAstro
             TouchCollection mscaDotknięte = TouchPanel.GetState();
             foreach (TouchLocation dotyk in mscaDotknięte)
             {
-                Vector2 pozDotyku = dotyk.Position; //równanie okręgu dla kliknięcie też?
+                Vector2 pozDotyku = dotyk.Position;
                 if(dotyk.State == TouchLocationState.Moved)
                 {
-                    //jeśli pozDotyku spełnia któreś z równać okręgu to dana akcja, punkt S=(a,b)
-                    Vector2 upButton = new Vector2(110, 645); //r=40
-                    Vector2 downButton = new Vector2(110, 740); //r=40
-                    Vector2 leftButton = new Vector2(60, 690); //r=40
-                    Vector2 rightButton = new Vector2(160, 690); //r=40
-                   
-                    //dotyk musiałby mieć promień mniejszy niż przycisk?
-                    if (pozDotyku == upButton)
+                    //tutaj równanie koła dla każdego z przycisków (x-a)^2+(y-b)^2 <= r^2
+                    if (Math.Pow(pozDotyku.X - 110, 2) + (Math.Pow(pozDotyku.Y - 645, 2)) <= 40*40) //a=110, b=645, r=40
                     {
                         gracz.MoveU();
                     }
-                    if (pozDotyku == downButton)
+                    if (Math.Pow(pozDotyku.X - 110, 2) + (Math.Pow(pozDotyku.Y - 740, 2)) <= 40 * 40) //a=110, b=740, r=40
                     {
                         gracz.MoveD();
                     }
-                    if (pozDotyku == leftButton)
+                    if (Math.Pow(pozDotyku.X - 60, 2) + (Math.Pow(pozDotyku.Y - 690, 2)) <= 40 * 40) //a=60, b=690, r=40
                     {
                         gracz.MoveL();
                     }
-                    if (pozDotyku == rightButton)
+                    if (Math.Pow(pozDotyku.X - 160, 2) + (Math.Pow(pozDotyku.Y - 690, 2)) <= 40 * 40) //a=160, b=690, r=40
                     {
                         gracz.MoveR();
                     }
@@ -110,14 +105,13 @@ namespace stumskiAstro
             }
             base.Update(gameTime);
         }
-
         protected override void Draw(GameTime gameTime)
         {
             GraphicsDevice.Clear(Color.CornflowerBlue);
             spriteBatch.Begin();
-            spriteBatch.Draw(niebo, new Vector2(0, 0), Color.White);
+            spriteBatch.Draw(niebo, new Vector2(0, 0), Color.White); //niebo
             gracz.Draw(rakieta, spriteBatch); //tylko fragment z rectangle zgodnie z instrukcją
-            spriteBatch.Draw(control, new Vector2(0, 583), Color.White);
+            spriteBatch.Draw(control, new Vector2(0, 583), Color.White); //przyciski
             spriteBatch.End();
             base.Draw(gameTime);
         }
