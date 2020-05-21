@@ -3,10 +3,9 @@ using Microsoft.Xna.Framework.Graphics;
 using Microsoft.Xna.Framework.Input;
 using Microsoft.Xna.Framework.Input.Touch;
 using System;
-using System.Threading;
 using Windows.ApplicationModel.Core;
-using Windows.UI.Popups;
-using Windows.UI.Xaml.Controls;
+using Microsoft.Xna.Framework.Audio;
+using System.Threading;
 
 namespace stumskiAstro
 {
@@ -25,9 +24,11 @@ namespace stumskiAstro
         private DateTime timeOfGameOver;    
         private SpriteFont wykrytoKolizje, wykrytoKolizjePocisk;
         public int score = 0;
-        private bool isGameOver =  false;
+        private bool isGameOver = false;
+        SoundEffectInstance wybuchRaz;
+        SoundEffect wybuch;
 
-        enum States
+        enum States //stany gry
         {
             GameOver,
             Game,
@@ -63,13 +64,14 @@ namespace stumskiAstro
             control = Content.Load<Texture2D>("control");
             wykrytoKolizje = Content.Load<SpriteFont>("File");
             wykrytoKolizjePocisk = Content.Load<SpriteFont>("KolizjaPocisk");
+            wybuch = Content.Load<SoundEffect>("wybuch");
             wróg = new Meteor(meteor, 10);
             wrógDrugi = new Meteor(meteor, 20);
             gracz = new Rakieta(rakieta, pocisk);
+            wybuchRaz = wybuch.CreateInstance();
         }
         protected override void UnloadContent()
         {
-            // TODO: Unload any non ContentManager content here
         }
 
         protected override void Update(GameTime gameTime)
@@ -82,8 +84,9 @@ namespace stumskiAstro
                     gracz.LotPocisku();
                     if (wróg.Kolizja(gracz) || wrógDrugi.Kolizja(gracz))
                     {
+                        wybuchRaz.Play(); //start przed komunikatem
                         isGameOver = true;
-                        _state = States.GameOver;
+                        _state = States.GameOver; //ustawiamy status na GameOver
                         timeOfGameOver = DateTime.Now;
                     }
 
@@ -150,6 +153,8 @@ namespace stumskiAstro
                 case States.GameOver:
                     if ((DateTime.Now - timeOfGameOver).TotalSeconds >= 3) //wyłącz aplikację po trzech sekundach
                     {
+                        wybuchRaz.Stop(); //stop po komunikacie
+                        Thread.Sleep(500); //chwila przerwy po zakończeniu dzwięku, ogólnie zaleca się unikać Thread w MonoGame - tu nie ma znaczenia i tak symulujemy wciśnięcie "Back" po chwili
                         CoreApplication.Exit(); //NavigationService GoBack() -> nie można dodać takiej biblioteki
                     }
                     break;
@@ -165,13 +170,13 @@ namespace stumskiAstro
             gracz.Draw(rakieta, spriteBatch); //tylko fragment z rectangle zgodnie z instrukcją
             wróg.Draw(spriteBatch);
             wrógDrugi.Draw(spriteBatch);
-
             spriteBatch.Draw(control, new Vector2(0, 583), Color.White); //przyciski
             if (isGameOver == true)
             {
-                spriteBatch.DrawString(wykrytoKolizje, "Game Over!!!", new Vector2(120, 300), Color.White);
+                spriteBatch.DrawString(wykrytoKolizje, "Game Over!!!", new Vector2(90, 300), Color.White); //monit o końcu gry
             }
-            spriteBatch.DrawString(wykrytoKolizjePocisk, "Score:" + (wróg.getScore() + wrógDrugi.getScore()), new Vector2(410, 780), Color.White);
+            spriteBatch.DrawString(wykrytoKolizjePocisk, "Score:" + (wróg.GetScore() + wrógDrugi.GetScore()), new Vector2(410, 780), Color.White); //wynik gracza
+
             spriteBatch.End();
             base.Draw(gameTime);
         }

@@ -1,7 +1,6 @@
 ﻿using Microsoft.Xna.Framework;
 using Microsoft.Xna.Framework.Graphics;
 using System;
-using System.Threading;
 
 namespace stumskiAstro
 {
@@ -28,10 +27,10 @@ namespace stumskiAstro
         {
             return position;
         }
-        private void Startuj(Random genLL)
+        private void Startuj(Random generujLL)
         {
-            position = new Vector2(genLL.Next(50, 500), -texture.Height);
-            prędkość = new Vector2(genLL.Next(-13, 13), genLL.Next(3, 10)); //zgodnie z instrukcją, moim zdaniem można dać trochę inne wartości by prędkość była mniejsza - teraz gra jest trudna
+            position = new Vector2(generujLL.Next(50, 500), -texture.Height);
+            prędkość = new Vector2(generujLL.Next(-13, 13), generujLL.Next(3, 10)); //zgodnie z instrukcją, moim zdaniem można dać trochę inne wartości by prędkość była mniejsza - teraz gra jest trudna
         }
         public bool Kolizja(Rakieta gracz)  
         {
@@ -76,7 +75,7 @@ namespace stumskiAstro
             if (nrKlatki == 3)
                 nrKlatki = 0;
         }
-        public int getScore()
+        public int GetScore()
         {
             return score;
         }

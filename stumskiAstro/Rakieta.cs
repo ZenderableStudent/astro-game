@@ -1,6 +1,5 @@
 ﻿using Microsoft.Xna.Framework;
 using Microsoft.Xna.Framework.Graphics;
-using System.Threading;
 
 namespace stumskiAstro
 {
@@ -12,7 +11,7 @@ namespace stumskiAstro
         private int nrKlatki;
         private int szerokośćKlatki;
         private Pocisk strzał;
-        public Rakieta(Texture2D texture, Texture2D pocisk2D) //musi być public, by działało w klasie Game1
+        public Rakieta(Texture2D texture, Texture2D pocisk2D) //musi być public, by działało w klasie Game1, to samo niżej
         {
             this.texture = texture;
             this.pocisk2D = pocisk2D;
@@ -32,7 +31,7 @@ namespace stumskiAstro
         public void deletePocisk()
         {
             strzał.wystrzelony = false;
-            strzał.position = new Vector2(1000, 1000); //ustawia pozycje pocisku poza mapa, bez tego dalej wykrywalo kolizje
+            strzał.position = new Vector2(1000, 1000); //ustawia pozycje pocisku poza mapę, bez tego wykrywało dalej kolizję
         }
         private struct Pocisk
         {
@@ -94,7 +93,7 @@ namespace stumskiAstro
                     position.Y = 477;
             }
         }
-        public void Draw(Texture2D rakieta, SpriteBatch spriteBatch) //tylko ten fragment kodu w metodzie zgodnie z instrukcją
+        public void Draw(Texture2D rakieta, SpriteBatch spriteBatch) //tylko ten fragment kodu w metodzie zgodnie z instrukcją, argument rakieta zostawiony w celu pokazania, że był wczesniej używany
         {
             szerokośćKlatki = texture.Width / 6;
 
@@ -109,8 +108,7 @@ namespace stumskiAstro
             nrKlatki++;
             if (nrKlatki == 6)
                 nrKlatki = 0;
-            //spriteBatch.Draw(rakieta, rectGracza, Color.White); //poprzednie punkty w instrukcji 
-            
+            //spriteBatch.Draw(rakieta, rectGracza, Color.White); //poprzednie punkty w instrukcji  
         }
     }
 }
